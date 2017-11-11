@@ -10,5 +10,9 @@ export const receiveCourses = courses => {
 };
 
 export const fetchAllCourses = () => dispatch => {
-    return coursesAPIUtil.fetchAllCourses();
+    return coursesAPIUtil.fetchAllCourses()
+        .then(
+            res => dispatch(receiveCourses(res.data),
+            error => dispatch(console.log(error))
+        ));
 };

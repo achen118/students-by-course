@@ -3,24 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.17.0",
-    "chart.js": "^2.7.1",
     "express": "^4.16.2",
-    "mongoose": "^4.13.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "react-redux": "^5.0.6",
-    "react-scripts": "1.0.17",
-    "redux": "^3.7.2",
-    "redux-thunk": "^2.2.0"
+    "mongoose": "^4.13.0"
   },
   "scripts": {
-    "start": "nodemon server.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon server.js",
+    "client": "node startClient.js"
   },
   "devDependencies": {
+    "concurrently": "^3.5.0",
     "nodemon": "^1.12.1"
-  }
+  },
+  "proxy": "http://localhost:3001/"
 }

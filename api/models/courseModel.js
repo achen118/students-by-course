@@ -4,6 +4,10 @@ var Schema = mongoose.Schema;
 
 
 var CourseSchema = new Schema({
+    id: {
+        type: Number,
+        required: 'course id required'
+    },
     year: {
         type: Number,
         required: 'Year of course required'
