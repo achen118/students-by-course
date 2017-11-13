@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Chart from 'chart.js';
 import CourseGridItem from './courseGridItem';
-import { consolidateCourses } from '../../util/coursesUtil';
 
 class StudentsByCourse extends Component {
     componentDidMount() {
@@ -23,16 +22,38 @@ class StudentsByCourse extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedYear: "2015-2016",
+            selectedYear: "2016",
             selectedCourse: "English 1C: Applied Composition"
         };
         this.updateYear = this.updateYear.bind(this);
+        this.consolidateCourses = this.consolidateCourses.bind(this);
     }
 
     updateYear(year) {
         return event => this.setState({
             year: year
         });
+    }
+
+    consolidateCourses(e) {
+        const { courses } = this.props;
+        let { selectedCourse, selectedYear } = this.state;
+        const consolidatedCourses = [];
+        
+        courses.byYear[selectedYear].byName[selectedCourse].allInstructors.forEach(instructor => {
+            const coursesToConsolidate = courses.byYear[selectedYear].byName[selectedCourse].byInstructor[instructor];
+            const consolidatedCourse = {
+                year: selectedYear,
+                course: selectedCourse,
+                instructor: instructor,
+                students: 0
+            };
+            coursesToConsolidate.forEach(course => {
+                consolidatedCourse.students += course.students;
+            });
+            consolidatedCourses.push(consolidatedCourse);
+        });
+        return consolidatedCourses;
     }
 
     render() {
@@ -42,18 +63,9 @@ class StudentsByCourse extends Component {
         let displayGrid;
         // Will just check for selectedCourse in future
         if (selectedCourse && courses.allYears.length > 0) {
-            // displayGrid = courses.byName[selectedCourse].map((course, idx) => (
-            //     <CourseGridItem course={ course } key={ idx } />
-            // ));
-            let years = [selectedYear];
-            if (selectedYear === "2015-2016") {
-                years = [2015, 2016];
-            }
-            const gridData = [];
-            years.forEach(year => {
-                gridData.concat(consolidateCourses(courses.byYear[year]));
-            });
-            console.log(gridData);
+            displayGrid = this.consolidateCourses().map((course, idx) => (
+                <CourseGridItem course={ course } key={ idx } />
+            ));
         }
         return (
             <div className="App">

@@ -8,7 +8,7 @@ const defaultState = {
 
 const coursesReducer = (state = defaultState, action) => {
     Object.freeze(state);
-    switch(action.type) {
+    switch (action.type) {
         case RECEIVE_COURSES:
             const nextState = merge({}, defaultState);
             action.courses.forEach(el => {
@@ -20,15 +20,30 @@ const coursesReducer = (state = defaultState, action) => {
                         nextState.byYear[el.year].allNames.push(el.course);
                     }
                     if (nextState.byYear[el.year].byName[el.course]) {
-                        nextState.byYear[el.year].byName[el.course].push(el);
+                        if (!nextState.byYear[el.year].byName[el.course].allInstructors.includes(el.instructor)) {
+                            nextState.byYear[el.year].byName[el.course].allInstructors.push(el.instructor);
+                        }
+                        if (nextState.byYear[el.year].byName[el.course].byInstructor[el.instructor]) {
+                            nextState.byYear[el.year].byName[el.course].byInstructor[el.instructor].push(el);
+                        } else {
+                            nextState.byYear[el.year].byName[el.course].byInstructor[el.instructor] = [el];
+                        }
                     } else {
-                        nextState.byYear[el.year].byName[el.course] = [el];
+                        nextState.byYear[el.year].byName[el.course] = {
+                            allInstructors: [el.instructor],
+                            byInstructor: {
+                                [el.instructor]: [el]
+                            }
+                        };
                     }
                 } else {
                     nextState.byYear[el.year] = {
                         allNames: [el.course],
                         byName: {
-                            [el.course]: [el]
+                            [el.course]: {
+                                allInstructors: [],
+                                byInstructor: {}
+                            }
                         }
                     };
                 }

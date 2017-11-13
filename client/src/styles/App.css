@@ -53,6 +53,10 @@ header {
 
 .grid-container {
   padding: 50px 30px 30px 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: left;
 }
 
 .grid-container h2 {
@@ -67,7 +71,6 @@ header {
   align-items: center;
   width: 100%;
   border-top: 1px solid black;
-  padding: 10px;
   box-sizing: border-box;
 }
 
@@ -93,6 +96,11 @@ header {
 
 .grid-row li:nth-of-type(4) {
   width: 20%;
+}
+
+.grid-row li {
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 input {
